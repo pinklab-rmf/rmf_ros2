@@ -407,8 +407,8 @@ void GoToPlace::Active::_find_plan()
         // The planner could not find a way to reach the goal
         self->_state->update_status(Status::Error);
         self->_state->update_log().error(
-          "["
-          + start_name + "] 에서 [" + goal_name + "] 이동하는 계획을 찾지 못했습니다. 곧 다시 시도할 것입니다.");
+          "Failed to find a plan to move from ["
+          + start_name + "] to [" + goal_name + "]. Will retry soon.");
 
         self->_execution = std::nullopt;
         self->_schedule_retry();
@@ -421,8 +421,8 @@ void GoToPlace::Active::_find_plan()
 
       self->_state->update_status(Status::Underway);
       self->_state->update_log().info(
-        "["
-        + start_name + "] 에서 [" + goal_name + "] 으로 이동하는 계획을 찾았습니다");
+        "Found a plan to move from ["
+        + start_name + "] to [" + goal_name + "]");
 
       auto full_itinerary = project_itinerary(
         *result, self->_followed_by, *self->_context->planner());
@@ -496,14 +496,14 @@ void GoToPlace::Active::_execute_plan(
   {
     _state->update_status(Status::Completed);
     _state->update_log().info(
-      "로봇이 이미 목표에 도달했습니다.");
+      "The planner indicates that the robot is already at its goal.");
     _finished();
     return;
   }
 
   RCLCPP_INFO(
     _context->node()->get_logger(),
-    "로봇 [%s] 에 대해 지점 [%lu] 으로 이동 중",
+    "Executing go_to_place [%lu] for robot [%s]",
     _goal.waypoint(),
     _context->requester_id().c_str());
 
