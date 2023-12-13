@@ -54,7 +54,7 @@ DoorOpen::ActivePhase::ActivePhase(
   _request_id(std::move(request_id)),
   _expected_finish(std::move(expected_finish))
 {
-  _description = "Opening [door:" + _door_name + "]";
+  _description = "[문:" + _door_name + "] 이 열리는 중";
 }
 
 //==============================================================================
@@ -201,12 +201,12 @@ void DoorOpen::ActivePhase::_update_status(
     door_state->current_mode.value == DoorMode::MODE_OPEN
     && supervisor_has_session(*heartbeat, _request_id, _door_name))
   {
-    _status.status = "success";
+    _status.status = "완료";
     _status.state = LegacyTask::StatusMsg::STATE_COMPLETED;
   }
   else
   {
-    _status.status = "Waiting for [door:" + _door_name + "] to open";
+    _status.status = "[문:" + _door_name + "] 이 열릴 때까지 대기 중";
   }
 }
 
@@ -221,7 +221,7 @@ DoorOpen::PendingPhase::PendingPhase(
   _request_id(std::move(request_id)),
   _expected_finish(std::move(expected_finish))
 {
-  _description = "Open [door:" + _door_name + "]";
+  _description = "[문:" + _door_name + "] 이 열렸습니다.";
 }
 
 //==============================================================================

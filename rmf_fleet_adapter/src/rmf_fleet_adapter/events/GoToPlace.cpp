@@ -113,7 +113,7 @@ auto GoToPlace::Standby::begin(
   {
     RCLCPP_INFO(
       _context->node()->get_logger(),
-      "Beginning a new go_to_place [%lu] for robot [%s]",
+      " 로봇 [%s] 이 새로운 목적지 [%lu] 로 이동을 시작했습니다",
       _goal.waypoint(),
       _context->requester_id().c_str());
 
@@ -174,7 +174,7 @@ auto GoToPlace::Active::make(
       {
         RCLCPP_INFO(
           self->_context->node()->get_logger(),
-          "Replanning requested for [%s]",
+          "[%s]에 대한 재게획이 요청이 되었습니다",
           self->_context->requester_id().c_str());
 
         if (const auto c = self->_context->command())
@@ -203,7 +203,7 @@ auto GoToPlace::Active::make(
         // because the upcoming solution might involve a closed lane
         RCLCPP_INFO(
           self->_context->node()->get_logger(),
-          "Requesting replan for [%s] to account for a newly closed lane",
+          "[%s] 에 대한 재계획을 요청하여 새로 닫힌 차선을 고려합니다",
           self->_context->requester_id().c_str());
         self->_context->request_replan();
         return;
@@ -407,8 +407,8 @@ void GoToPlace::Active::_find_plan()
         // The planner could not find a way to reach the goal
         self->_state->update_status(Status::Error);
         self->_state->update_log().error(
-          "Failed to find a plan to move from ["
-          + start_name + "] to [" + goal_name + "]. Will retry soon.");
+          "["
+          + start_name + "] 에서 [" + goal_name + "] 이동하는 계획을 찾지 못했습니다. 곧 다시 시도할 것입니다.");
 
         self->_execution = std::nullopt;
         self->_schedule_retry();
@@ -421,8 +421,8 @@ void GoToPlace::Active::_find_plan()
 
       self->_state->update_status(Status::Underway);
       self->_state->update_log().info(
-        "Found a plan to move from ["
-        + start_name + "] to [" + goal_name + "]");
+        "["
+        + start_name + "] 에서 [" + goal_name + "] 으로 이동하는 계획을 찾았습니다");
 
       auto full_itinerary = project_itinerary(
         *result, self->_followed_by, *self->_context->planner());
@@ -496,14 +496,14 @@ void GoToPlace::Active::_execute_plan(
   {
     _state->update_status(Status::Completed);
     _state->update_log().info(
-      "The planner indicates that the robot is already at its goal.");
+      "로봇이 이미 목표에 도달했습니다.");
     _finished();
     return;
   }
 
   RCLCPP_INFO(
     _context->node()->get_logger(),
-    "Executing go_to_place [%lu] for robot [%s]",
+    "로봇 [%s] 에 대해 지점 [%lu] 으로 이동 중",
     _goal.waypoint(),
     _context->requester_id().c_str());
 

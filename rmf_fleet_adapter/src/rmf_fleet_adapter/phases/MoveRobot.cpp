@@ -33,7 +33,7 @@ MoveRobot::ActivePhase::ActivePhase(
   std::ostringstream oss;
   const auto dest = destination(
     waypoints.back(), _context->planner()->get_configuration().graph());
-  oss << "Moving to " << dest;
+  oss << "이동 중 " << dest;
   _description = oss.str();
 
   _action = std::make_shared<MoveRobot::Action>(
@@ -93,7 +93,7 @@ MoveRobot::PendingPhase::PendingPhase(
   std::ostringstream oss;
   const auto dest = destination(
     _waypoints.back(), _context->planner()->get_configuration().graph());
-  oss << "Move to " << dest;
+  oss << "이동 중 " << dest;
   _description = oss.str();
 }
 

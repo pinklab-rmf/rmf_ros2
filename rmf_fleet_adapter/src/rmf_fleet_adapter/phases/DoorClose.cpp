@@ -134,12 +134,12 @@ void DoorClose::ActivePhase::_update_status(
 {
   if (!supervisor_has_session(*heartbeat, _request_id, _door_name))
   {
-    _status.status = "success";
+    _status.status = "완료";
     _status.state = LegacyTask::StatusMsg::STATE_COMPLETED;
   }
   else
   {
-    _status.status = "Waiting for [door:" + _door_name + "] to close";
+    _status.status = "[문:" + _door_name + "] 이 닫힐 때까지 대기 중";
   }
 }
 
@@ -152,7 +152,7 @@ DoorClose::ActivePhase::ActivePhase(
   _door_name(std::move(door_name)),
   _request_id(std::move(request_id))
 {
-  _description = "Closing [door:" + _door_name + "]";
+  _description = "[문:" + _door_name + "] 이 닫히고있습니다.";
 }
 
 //==============================================================================
@@ -164,7 +164,7 @@ DoorClose::PendingPhase::PendingPhase(
   _door_name(std::move(door_name)),
   _request_id(std::move(request_id))
 {
-  _description = "Close [door:" + _door_name + "]";
+  _description = "[문:" + _door_name + "] 이 닫혔습니다";
 }
 
 //==============================================================================

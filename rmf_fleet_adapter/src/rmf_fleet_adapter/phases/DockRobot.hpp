@@ -99,9 +99,9 @@ void DockRobot::Action::operator()(const Subscriber& s)
 {
   LegacyTask::StatusMsg status;
   status.state = LegacyTask::StatusMsg::STATE_ACTIVE;
-  status.status = "Docking [" + _phase->_context->requester_id() +
-    "] into dock ["
-    + _phase->_dock_name + "]";
+  status.status = "[" + _phase->_context->requester_id() +
+    "] 를 ["
+    + _phase->_dock_name + "] 에 도킹 중";
 
   s.on_next(status);
   _phase->_context->command()->dock(
@@ -109,8 +109,8 @@ void DockRobot::Action::operator()(const Subscriber& s)
     [s, dock_name = _phase->_dock_name, context = _phase->_context]()
     {
       LegacyTask::StatusMsg status;
-      status.status = "Finished docking [" + context->requester_id()
-      + "] into dock [" + dock_name + "]";
+      status.status = "[" + context->requester_id()
+      + "] 를 [" + dock_name + "] 에 도킹 완료";
       status.state = LegacyTask::StatusMsg::STATE_COMPLETED;
       s.on_next(status);
       s.on_completed();

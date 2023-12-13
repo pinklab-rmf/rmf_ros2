@@ -212,7 +212,7 @@ void MoveRobot::Action::operator()(const Subscriber& s)
 
         if (path_index < action->_waypoints.size())
         {
-          msg.status = "Heading towards "
+          msg.status = "이동 중 "
           + destination(
             action->_waypoints[path_index],
             action->_context->planner()->get_configuration().graph());
@@ -221,13 +221,13 @@ void MoveRobot::Action::operator()(const Subscriber& s)
         {
           // TODO(MXG): This should really be a warning, but the legacy phase shim
           // does not have a way for us to specify a warning.
-          msg.status = "[Bug] [MoveRobot] Current path index was specified as ["
-          + std::to_string(path_index) + "] but that exceeds the limit of ["
+          msg.status = "[버그] [이동중로봇] 현재 경로 인덱스가 다음과 같이 지정되었습니다 ["
+          + std::to_string(path_index) + "] 하지만 그것은 제한을 초과합니다 ["
           + std::to_string(action->_waypoints.size()-1) + "]";
         }
 
         s.on_next(msg);
-      }
+      }move robot success
 
       if (action->_next_path_index > action->_waypoints.size())
       {
@@ -292,7 +292,7 @@ void MoveRobot::Action::operator()(const Subscriber& s)
 
         LegacyTask::StatusMsg msg;
         msg.state = LegacyTask::StatusMsg::STATE_COMPLETED;
-        msg.status = "move robot success";
+        msg.status = "로봇 이동 완료";
         s.on_next(msg);
         s.on_completed();
       }
