@@ -113,7 +113,7 @@ auto GoToPlace::Standby::begin(
   {
     RCLCPP_INFO(
       _context->node()->get_logger(),
-      " 로봇 [%s] 이 새로운 목적지 [%lu] 로 이동을 시작했습니다",
+      "Beginning a new go_to_place [%lu] for robot [%s]",
       _goal.waypoint(),
       _context->requester_id().c_str());
 
@@ -174,7 +174,7 @@ auto GoToPlace::Active::make(
       {
         RCLCPP_INFO(
           self->_context->node()->get_logger(),
-          "[%s]에 대한 재게획이 요청이 되었습니다",
+          "Replanning requested for [%s]",
           self->_context->requester_id().c_str());
 
         if (const auto c = self->_context->command())
@@ -203,7 +203,7 @@ auto GoToPlace::Active::make(
         // because the upcoming solution might involve a closed lane
         RCLCPP_INFO(
           self->_context->node()->get_logger(),
-          "[%s] 에 대한 재계획을 요청하여 새로 닫힌 차선을 고려합니다",
+          "Requesting replan for [%s] to account for a newly closed lane",
           self->_context->requester_id().c_str());
         self->_context->request_replan();
         return;
@@ -382,7 +382,7 @@ void GoToPlace::Active::_find_plan()
   const auto start_name = wp_name(*_context);
   const auto goal_name = wp_name(*_context, _goal);
   _state->update_log().info(
-    "Generating plan to move from [" + start_name + "] to [" + goal_name + "]");
+    "[" + start_name + "] 에서 [" + goal_name + "] 이동하는 계획을 생성 중");
 
   // TODO(MXG): Make the planning time limit configurable
   _find_path_service = std::make_shared<services::FindPath>(
@@ -407,8 +407,8 @@ void GoToPlace::Active::_find_plan()
         // The planner could not find a way to reach the goal
         self->_state->update_status(Status::Error);
         self->_state->update_log().error(
-          "Failed to find a plan to move from ["
-          + start_name + "] to [" + goal_name + "]. Will retry soon.");
+          "["
+          + start_name + "] 에서  [" + goal_name + "] 으로 이동하는 계획을 찾지 못했습니다. 곧 다시 시도할 것입니다.");
 
         self->_execution = std::nullopt;
         self->_schedule_retry();
@@ -421,8 +421,8 @@ void GoToPlace::Active::_find_plan()
 
       self->_state->update_status(Status::Underway);
       self->_state->update_log().info(
-        "Found a plan to move from ["
-        + start_name + "] to [" + goal_name + "]");
+        "["
+        + start_name + "] 에서 [" + goal_name + "] 으로 이동하는 계획을 찾았습니다.");
 
       auto full_itinerary = project_itinerary(
         *result, self->_followed_by, *self->_context->planner());
@@ -496,7 +496,7 @@ void GoToPlace::Active::_execute_plan(
   {
     _state->update_status(Status::Completed);
     _state->update_log().info(
-      "The planner indicates that the robot is already at its goal.");
+      "계획자가 로봇이 이미 목표에 도달했다고 나타냈습니다.");
     _finished();
     return;
   }
